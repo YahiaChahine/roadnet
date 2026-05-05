@@ -1,0 +1,13 @@
+{
+    "interval": 1.0,
+    "seed": 0,
+    "dir": "./",
+    "roadnetFile": "data/nanchang_warm_up/roadnet_warm_up_1000.json",
+    "flowFile": "data/nanchang_warm_up/flow_warm_up_1000.json",
+    "rlTrafficLight": true,
+    "saveReplay": true,
+    "roadnetLogFile": "log/roadnet_warm_up_1000.log",
+    "replayLogFile": "log/replay_warm_up_1000.log",
+    "step_time": 10,
+    "all_red_time": 5
+}

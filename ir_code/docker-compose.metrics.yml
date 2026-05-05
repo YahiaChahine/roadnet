@@ -1,0 +1,57 @@
+services:
+  metrics-ft:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "-c", "import glob,os,json,numpy as np; roots=sorted(glob.glob('output/ft_agent/run_*')); latest=max(roots,key=os.path.getmtime) if roots else None; print('latest ft:',latest); print(open(os.path.join(latest,'metrics.json')).read() if latest and os.path.exists(os.path.join(latest,'metrics.json')) else 'missing metrics.json')"]
+
+  metrics-ft-suite:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "-c", "import glob,os,json; roots=sorted(glob.glob('output/ft_agent/suite_*')); latest=max(roots,key=os.path.getmtime) if roots else None; print('latest suite:',latest); print(open(os.path.join(latest,'metrics_suite.json')).read() if latest else 'missing')"]
+
+  metrics-colight:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "scripts/metrics_colight.py", "--output-dir", "output/baseline/CoLight_xuancheng"]
+
+  metrics-colight-eval:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "scripts/eval_colight_avg_time.py", "--config", "./cfg/xuancheng/config_xuancheng_test.json", "--output-dir", "output/baseline/CoLight_xuancheng", "--duration", "3600", "--decision-interval", "10", "--thread-num", "1"]
+
+  metrics-mplight:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "-c", "import os,json,numpy as np; p='output/baseline/MPLight_xuancheng'; print('reward shape', np.load(f'{p}/reward.npy',allow_pickle=True).shape if os.path.exists(f'{p}/reward.npy') else 'missing'); print('loss shape', np.load(f'{p}/training_loss.npy',allow_pickle=True).shape if os.path.exists(f'{p}/training_loss.npy') else 'missing'); m=f'{p}/metrics.json'; d=json.load(open(m)) if os.path.exists(m) else None; print('avg travel time', d.get('avg_travel_time') if d else 'missing')"]
+
+  metrics-mplight-eval:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "scripts/eval_avg_time.py", "--agent", "MPLight", "--config", "./cfg/xuancheng/config_xuancheng_test.json", "--output-dir", "output/baseline/MPLight_xuancheng", "--duration", "3600", "--decision-interval", "10", "--thread-num", "1"]
+
+
+  metrics-colight-suite:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "-c", "import glob,os,json; roots=sorted(glob.glob('output/baseline/CoLight_suite_xuancheng_*')); latest=max(roots,key=os.path.getmtime) if roots else None; print('latest colight suite:',latest); d=json.load(open(os.path.join(latest,'metrics_suite.json'))) if latest else None; print(json.dumps({'mean_avg_travel_time': d.get('mean_avg_travel_time'), 'per_flow_avg_travel_time': [{k:v for k,v in r.items() if k in ['flowFile','avg_travel_time']} for r in d.get('results',[])]}, indent=2) if d else 'missing')"]
+
+  metrics-mplight-suite:
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: ["python", "-c", "import glob,os,json; roots=sorted(glob.glob('output/baseline/MPLight_suite_xuancheng_*')); latest=max(roots,key=os.path.getmtime) if roots else None; print('latest mplight suite:',latest); d=json.load(open(os.path.join(latest,'metrics_suite.json'))) if latest else None; print(json.dumps({'mean_avg_travel_time': d.get('mean_avg_travel_time'), 'per_flow_avg_travel_time': [{k:v for k,v in r.items() if k in ['flowFile','avg_travel_time']} for r in d.get('results',[])]}, indent=2) if d else 'missing')"]

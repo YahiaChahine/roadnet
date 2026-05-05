@@ -1,0 +1,14 @@
+{
+    "interval": 1.0,
+    "seed": 0,
+    "dir": "./",
+    "roadnetFile": "data/xuancheng_mod/roadnet_xuancheng250319.json",
+    "flowFile": "data/xuancheng_mod/xuancheng_2023_04_06_8to9.json",
+    "rlTrafficLight": true,
+    "laneChange": false,
+    "saveReplay": true,
+    "roadnetLogFile": "log/roadnet_xuancheng_validated.log",
+    "replayLogFile": "log/xuancheng_validated.log",
+    "step_time": 10,
+    "all_red_time": 3
+}

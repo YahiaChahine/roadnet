@@ -1,0 +1,48 @@
+services:
+  ft: &base
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hierach-ft:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    environment:
+      PYTHONUNBUFFERED: "1"
+      MPLBACKEND: Agg
+    command: ["python", "run_ft.py"]
+
+  ft-suite:
+    <<: *base
+    command: ["python", "run_ft_suite.py"]
+
+  train:
+    <<: *base
+    command: ["python", "run_ft.py"]
+
+  colight:
+    <<: *base
+    entrypoint: ["python", "run_colight.py"]
+
+  mplight:
+    <<: *base
+    entrypoint: ["python", "run_mplight.py"]
+
+
+  colight-suite:
+    <<: *base
+    command: ["python", "run_baseline_suite.py", "--agent", "colight"]
+
+  mplight-suite:
+    <<: *base
+    command: ["python", "run_baseline_suite.py", "--agent", "mplight"]
+
+  eval-avg-time:
+    <<: *base
+    entrypoint: ["python", "scripts/eval_avg_time.py"]
+
+  shell:
+    <<: *base
+    command: ["bash"]
+    stdin_open: true
+    tty: true
