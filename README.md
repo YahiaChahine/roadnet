@@ -78,13 +78,7 @@ roadnet/
 └── report/
     ├── main.pdf
     └── figures/              ← all plots and reproduced paper figures
-        ├── _plot_results.py              ← generates result plots from results_summary.csv
-        ├── results_progression.png       ← per-method travel time across datasets
-        ├── results_step_uplift.png       ← per-step proportional uplift
-        ├── results_bar.png               ← grouped bar chart by dataset
-        ├── results_rel_improve.png       ← travel-time reduction vs. MPLight
-        ├── xuancheng_*.png               ← reproduced figures from Ma et al. (data.pdf)
-        └── xlight_*.png                  ← reproduced figures from Zhang et al. (main.pdf)
+        
 ```
 
 ---
